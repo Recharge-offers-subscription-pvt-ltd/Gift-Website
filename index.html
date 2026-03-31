@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Cuddle Up with Comfort – Plushie Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="announcement">🐰 Shop Any 2 Items – We'll Add a Free Gift! 🎁</div>
+
+    <header>
+        <div class="logo">Plushieland 🐇</div>
+        <nav>
+            <a href="#">All Toys</a>
+            <a href="#">Shop by Age</a>
+            <a href="#">Best Sellers</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="header-icons">
+            <button title="Search">🔍</button>
+            <button title="Account">👤</button>
+            <button title="Cart" style="position:relative">
+                🛒
+                <span class="cart-badge" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="#">Home</a> › <a href="#">Plushies</a> › Bunny Cuddle Up with Comfort
+    </div>
+
+    <section class="product-section">
+        <!-- GALLERY -->
+        <div class="gallery fade-up">
+            <div class="main-image-wrap" id="mainImageWrap">
+                <img id="mainImage"
+                    src="https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=1220"
+                    alt="Bunny Cuddle Up with Comfort">
+                <button class="zoom-btn" onclick="openModal()" title="Zoom">🔍</button>
+            </div>
+            <div class="thumbnails" id="thumbnails"></div>
+        </div>
+
+        <!-- PRODUCT INFO -->
+        <div class="product-info">
+            <div class="fade-up">
+                <h1 class="product-title">Bunny Cuddle Up<br>with Comfort 🐰</h1>
+            </div>
+            <div class="rating-row fade-up">
+                <span class="stars">★★★★★</span>
+                <span class="rating-count">4.7</span>
+                <span class="review-link">(6 reviews)</span>
+            </div>
+            <div class="price-row fade-up">
+                <span class="original-price">Rs. 1099.00</span>
+                <span class="sale-price">Rs. 99.00</span>
+                <span class="badge-save">Save 73%</span>
+            </div>
+            <p class="tax-note fade-up">Tax included. <a href="#">Shipping</a> calculated at checkout.</p>
+
+            <div class="style-section fade-up">
+                <div class="style-label">Style: <span id="selectedStyle">Strawberry</span></div>
+                <div class="style-options">
+                    <button class="style-btn active" onclick="selectStyle(this,'Strawberry')">🍓 Strawberry</button>
+                    <button class="style-btn" onclick="selectStyle(this,'Carrot')">🥕 Carrot</button>
+                </div>
+            </div>
+
+            <div class="qty-section fade-up">
+                <div class="qty-label">Quantity</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                    <span class="qty-value" id="qtyValue">1</span>
+                    <button class="qty-btn" onclick="changeQty(1)">+</button>
+                </div>
+            </div>
+
+            <div class="cta-buttons fade-up">
+                <button class="btn-cart" onclick="addToCart()">🛒 Add to Cart</button>
+                <button class="btn-buy" onclick="openCheckout()">
+                    <span class="btn-buy-icon">⚡</span> Buy Now
+                </button>
+            </div>
+
+            <div class="trust-badges fade-up">
+                <div class="badge"><span class="badge-icon">🧠</span>Smart Play</div>
+                <div class="badge"><span class="badge-icon">🇮🇳</span>Made in India</div>
+                <div class="badge"><span class="badge-icon">✅</span>100% Safe</div>
+                <div class="badge"><span class="badge-icon">👶</span>Kids Safe</div>
+                <div class="badge"><span class="badge-icon">🔒</span>Secure Checkout</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCT DESCRIPTION -->
+    <section class="product-description-section fade-up">
+        <h3>Product Description</h3>
+        <p>Meet the Hoppy Bliss Plush: Cuddle Up with Comfort– a soft, cuddly, and transformable plush toy that doubles
+            as a cute storage pouch! This plush bunny is designed to bring comfort and joy, making it a perfect
+            companion for kids, teens, and plush lovers of all ages. The innovative reversible design allows you to zip
+            the bunny into a strawberry pouch for easy storage or travel. Made from premium-quality plush fabric, this
+            plushie is incredibly soft, huggable, and safe for children.</p>
+
+        <h3>Key Features</h3>
+        <ul>
+            <li>🐰 <strong>2-in-1 Design</strong> – Transforms from a fluffy bunny into a cute strawberry pouch in
+                seconds.</li>
+            <li>🍓 <strong>Soft & Huggable Material</strong> – Made with ultra-soft, plush fabric for maximum comfort.
+            </li>
+            <li>👜 <strong>Portable & Compact</strong> – Easily converts into a pouch for travel or storage.</li>
+            <li>🧵 <strong>High-Quality Stitching</strong> – Durable and long-lasting, ensuring endless cuddles.</li>
+            <li>🎨 <strong>Adorable Aesthetic</strong> – Features a kawaii bunny face with floppy ears and blushing
+                cheeks.</li>
+            <li>🎁 <strong>Perfect Gift Idea</strong> – Ideal for birthdays, Christmas, Valentine’s Day, or any plushie
+                lover!</li>
+        </ul>
+
+        <h3>Benefits</h3>
+        <ul>
+            <li>👶 <strong>Great for Kids & Adults</strong> – Perfect for playtime, nap time, or as a room décor piece.
+            </li>
+            <li>✨ <strong>Stress Relief & Comfort</strong> – The soft texture provides a calming and comforting feel.
+            </li>
+            <li>🛍️ <strong>Multi-Functional Use</strong> – Can be used as a plushie, travel pouch, or decorative item.
+            </li>
+            <li>💖 <strong>Easy to Clean</strong> – Made with washable, non-toxic materials for effortless maintenance.
+            </li>
+        </ul>
+
+        <h3>Why Choose Us?</h3>
+        <ul>
+            <li>✅ <strong>Unique Transformable Design</strong> – A plush toy and a cute pouch in one!</li>
+            <li>✅ <strong>Premium Plush Material</strong> – Soft, skin-friendly, and safe for kids.</li>
+            <li>✅ <strong>Lightweight & Travel-Friendly</strong> – Take it anywhere for on-the-go cuddles.</li>
+            <li>✅ <strong>Aesthetic & Fun</strong> – Adds charm to any room or plushie collection.</li>
+        </ul>
+
+        <h3>How to Use</h3>
+        <ol>
+            <li>1️⃣ Unzip the pouch to reveal the fluffy bunny.</li>
+            <li>2️⃣ Gently pull out the plush bunny for instant cuddles.</li>
+            <li>3️⃣ When not in use, fold the bunny back into the strawberry and zip it up.</li>
+            <li>4️⃣ Enjoy it as a cute pouch or display it as a plushie!</li>
+        </ol>
+
+        <h3>Box Contents</h3>
+        <p>📦 <strong>Inside the Box:</strong><br>✔️ 1 x Bunny Plush Toy (Convertible into a Strawberry Pouch)</p>
+
+        <h3>Product Specifications</h3>
+        <ul>
+            <li>📏 <strong>Dimensions:</strong> Approx. 10-12 inches (when expanded)</li>
+            <li>🎨 <strong>Material:</strong> High-quality, ultra-soft plush fabric</li>
+            <li>⚖️ <strong>Weight:</strong> Lightweight & easy to carry</li>
+            <li>👦 <strong>Recommended Age:</strong> 3+ years (suitable for all ages)</li>
+            <li>🛠️ <strong>Care Instructions:</strong> Hand wash or machine wash on a gentle cycle</li>
+        </ul>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="reviews-section fade-up">
+        <h2 class="reviews-title">What Parents Say 💬</h2>
+        <div class="reviews-grid" id="reviewsGrid"></div>
+    </section>
+
+    <div class="wishlist-float" title="Wishlist">🤍</div>
+
+    <!-- ZOOM MODAL -->
+    <div class="modal-overlay" id="modal" onclick="closeModal()">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <img class="modal-img" id="modalImg" src="" alt="Zoomed">
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="checkout-box">
+            <button class="modal-close checkout-close" onclick="closeCheckout()">✕</button>
+            <h2 class="checkout-title">Complete Purchase</h2>
+            
+            <!-- Step 1: Delivery Details -->
+            <div id="checkoutStep1">
+                <p style="margin-bottom:15px;color:var(--muted);font-size:0.9rem;">Step 1 of 2: Delivery Details</p>
+                <input type="text" class="checkout-input" id="custName" placeholder="Full Name">
+                <input type="tel" class="checkout-input" id="custPhone" placeholder="Mobile Number">
+                
+                <div style="display:flex;gap:10px;margin-bottom:10px;">
+                    <input type="text" class="checkout-input" id="custAddress" placeholder="Full Address" style="margin-bottom:0;flex:1;">
+                    <button class="btn-location" onclick="detectLocation()" title="Detect Location">📍</button>
+                </div>
+                <input type="text" class="checkout-input" id="custPincode" placeholder="Pincode / City">
+                
+                <button class="btn-buy" style="width:100%;" onclick="goToPayment()">
+                    Proceed to Payment ➡️
+                </button>
+            </div>
+
+            <!-- Step 2: Payment Details -->
+            <div id="checkoutStep2" style="display: none;">
+                <p style="margin-bottom:15px;color:var(--muted);font-size:0.9rem;">Step 2 of 2: Secure Payment</p>
+                <div class="payment-amount-box">
+                    <span style="font-size:0.9rem;color:var(--muted);">Total Amount</span>
+                    <strong id="finalAmountStr">Rs. 99</strong>
+                </div>
+                
+                <p style="text-align:center;margin-bottom:10px;font-weight:700;">Scan to Pay</p>
+                <div id="paymentQR" class="qr-container"></div>
+                
+                <p style="text-align:center;margin:10px 0;font-weight:600;color:var(--muted);">OR</p>
+                
+                <a href="#" id="upiLinkBtn" class="btn-buy" style="width:100%;text-decoration:none;display:flex;justify-content:center;">
+                    Pay via UPI App 📱
+                </a>
+                
+                <button class="btn-cart" style="width:100%;margin-top:10px;background:#f0dde5;color:var(--text);box-shadow:none;" onclick="goBackToDetails()">
+                    ⬅️ Back to Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">Plushieland 🐇</div>
+        <p>© 2026 Plushieland. Spreading cuddles across India. 🌸</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
