@@ -1,10 +1,5 @@
 const images = [
-    'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=1220',
-    'https://www.hellokidology.in/cdn/shop/files/9_2fb84739-1713-49ac-a6f7-1e96235c5a9b.jpg?v=1699973060&width=610',
-    'https://www.hellokidology.in/cdn/shop/files/6_7015c966-236d-43b6-a9f5-5c086e0feef3.jpg?v=1741688694&width=610',
-    'https://www.hellokidology.in/cdn/shop/files/71XMNIZYqOL._SL1500_7d9e3582-b956-48fd-8fc9-87ba132e04fd.jpg?v=1741688694&width=1220',
-    'https://www.hellokidology.in/cdn/shop/files/adorable-strawberry-rabbit-plushie-cute-bunny-soft-toy-35-cm-original-imah2edhnbhahuyv_eb9a0bdb-e40a-4c9b-8976-7371d645476d.webp?v=1741688694&width=1220',
-    'https://cdn.shopify.com/s/files/1/0709/6093/9317/files/gfvkytf_480x480_ac80ee07-4208-4eeb-91c1-242bc2fdeafa_480x480.gif?v=1684479066'
+    'https://coveradda24.myshopify.com/cdn/shop/files/647450007_918745181206935_5826188398344680965_n.jpg?v=1773213151&width=1200'
   ];
 
   let currentImg = 0;
@@ -46,6 +41,14 @@ const images = [
   }
 
   function addToCart() {
+    const boxNameEl = document.getElementById('boxName');
+    const bangleSizeEl = document.getElementById('bangleSize');
+    
+    if (boxNameEl && bangleSizeEl) {
+        if(!boxNameEl.value.trim()) { alert("Please enter the Custom Name for the Box."); return; }
+        if(!bangleSizeEl.value) { alert("Please select a Bangle Size."); return; }
+    }
+
     cartCount += qty;
     const cartCountEl = document.getElementById('cartCount');
     if (cartCountEl) cartCountEl.textContent = cartCount;
@@ -79,12 +82,12 @@ const images = [
 
   // Reviews
   const reviews = [
-    { name: 'Aarav K.', stars: 5, text: 'Gifted this to my sister and she loves how it turns into a strawberry! Clever design.' },
-    { name: 'Sneha P.', stars: 5, text: 'The softest plushie I have ever owned. Perfect for desk decoration and very huggable.' },
-    { name: 'Ishaan M.', stars: 5, text: 'My son carries his "bunny-berry" everywhere. High quality and safe for kids.' },
-    { name: 'Ananya S.', stars: 4, text: 'Super cute and matches my room perfectly. The reversible zipper is very smooth.' },
-    { name: 'Kabir V.', stars: 5, text: 'Bought this as a surprise gift, and it was a hit! Worth every rupee for the quality.' },
-    { name: 'Diya R.', stars: 5, text: 'Arrived quickly in beautiful packaging. Soft, cuddly, and looks exactly like the photos!' },
+    { name: 'Rajesh K.', stars: 5, text: 'The Kashmiri ghungroo work is exquisite. My wife loved the traditional look.' },
+    { name: 'Kavita S.', stars: 5, text: 'Love the personalized box! It makes the gift so much more special and unique.' },
+    { name: 'Sunil M.', stars: 4, text: 'The gold plating looks very premium. Perfect choice for the wedding season.' },
+    { name: 'Preeti G.', stars: 5, text: 'Stunning collection. My daughter absolutely loved the variety of colors and textures.' },
+    { name: 'Manoj V.', stars: 5, text: 'High quality and very elegant. The custom name engraving is a very nice touch.' },
+    { name: 'Sunita R.', stars: 5, text: 'Absolutely beautiful. The ghungroos add a lovely traditional sound and charm.' },
   ];
 
   const grid = document.getElementById('reviewsGrid');
@@ -112,9 +115,16 @@ const images = [
   }
 
   // --- CHECKOUT LOGIC ---
-  const PRICE_PER_ITEM = 99;
+  const PRICE_PER_ITEM = 249;
 
   function openCheckout() {
+    const boxNameEl = document.getElementById('boxName');
+    const bangleSizeEl = document.getElementById('bangleSize');
+    
+    if (boxNameEl && bangleSizeEl) {
+        if(!boxNameEl.value.trim()) { alert("Please enter the Custom Name for the Box."); return; }
+        if(!bangleSizeEl.value) { alert("Please select a Bangle Size."); return; }
+    }
     document.getElementById('checkoutModal').classList.add('open');
     document.getElementById('checkoutStep1').style.display = 'block';
     document.getElementById('checkoutStep2').style.display = 'none';
