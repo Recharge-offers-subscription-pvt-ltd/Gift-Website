@@ -62,7 +62,6 @@ function injectAuthModal() {
     const modalHTML = `
         <div class="modal-overlay" id="authModal">
             <div class="auth-box" style="text-align: center; padding: 40px 30px;">
-                <button class="modal-close" onclick="closeAuthModal()">✕</button>
                 
                 <h2 class="auth-title" style="margin-bottom: 5px; font-size: 1.8rem;">Welcome to Sachin's <br> Delivery Hub 🐰</h2>
                 <p class="auth-subtitle" style="margin-bottom: 25px; font-weight: 700; color: #4caf7d;">✅ Official & Secured Partner</p>
