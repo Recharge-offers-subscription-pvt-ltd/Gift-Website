@@ -38,7 +38,7 @@
             <button title="Account" id="accountBtn" onclick="handleAccountClick()">👤</button>
             <button title="Cart" style="position:relative" onclick="openCart()">
                 🛒
-                <span class="cart-badge" id="cartCount">0</span>
+                <span class="cart-badge" id="cartCount" style="display:none"></span>
             </button>
         </div>
     </header>
@@ -110,41 +110,52 @@
     </section>
 
     <!-- RECOMMENDATIONS -->
-    <section class="recommendations-section fade-up" style="max-width: 1180px; margin: 0 auto; padding: 0 32px 60px;">
-        <h2 class="reviews-title" style="margin-bottom: 24px;">You May Also Like ✨</h2>
-        <div class="reviews-grid" style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 15px;">
-            <a href="index.html" style="text-decoration:none; color:inherit; display:block; min-width: 260px; max-width: 290px;">
-                <div class="review-card" style="padding: 15px; text-align: center;">
-                    <img src="https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300" 
-                         alt="Bunny Plushie" style="width:100%; height:220px; object-fit:cover; border-radius:12px; margin-bottom:12px;">
-                    <h4 style="font-family:'Nunito', sans-serif; font-weight:800; font-size:1.05rem; margin-bottom:6px; min-height: 44px; display:flex; align-items:center; justify-content:center;">Bunny Plushie Pouch</h4>
-                    <div style="color:var(--deep-pink); font-weight:900; font-size:1.15rem;">Rs. 99 <span style="font-size:0.8rem; color:var(--muted); text-decoration:line-through; font-weight:600; margin-left:6px;">Rs. 1,099</span></div>
-                </div>
-            </a>
-            <a href="jhumka.html" style="text-decoration:none; color:inherit; display:block; min-width: 260px; max-width: 290px;">
-                <div class="review-card" style="padding: 15px; text-align: center;">
-                    <img src="https://coveradda24.myshopify.com/cdn/shop/files/WhatsAppImage2026-01-15at1.33.34PM_fd3e5de8-1d97-4501-95ee-af4d879c958d.jpg?v=1768652364&width=300" 
-                         alt="Jhumka Box" style="width:100%; height:220px; object-fit:cover; border-radius:12px; margin-bottom:12px;">
-                    <h4 style="font-family:'Nunito', sans-serif; font-weight:800; font-size:1.05rem; margin-bottom:6px; min-height: 44px; display:flex; align-items:center; justify-content:center;">Jhumka Box - 16 Pairs</h4>
-                    <div style="color:var(--deep-pink); font-weight:900; font-size:1.15rem;">Rs. 199 <span style="font-size:0.8rem; color:var(--muted); text-decoration:line-through; font-weight:600; margin-left:6px;">Rs. 499</span></div>
-                </div>
-            </a>
-            <a href="bangles.html" style="text-decoration:none; color:inherit; display:block; min-width: 260px; max-width: 290px;">
-                <div class="review-card" style="padding: 15px; text-align: center;">
-                    <img src="https://coveradda24.myshopify.com/cdn/shop/files/647450007_918745181206935_5826188398344680965_n.jpg?v=1773213151&width=300" 
-                         alt="Bangles Box" style="width:100%; height:220px; object-fit:cover; border-radius:12px; margin-bottom:12px;">
-                    <h4 style="font-family:'Nunito', sans-serif; font-weight:800; font-size:1.05rem; margin-bottom:6px; min-height: 44px; display:flex; align-items:center; justify-content:center;">Bangles Set with Box</h4>
-                    <div style="color:var(--deep-pink); font-weight:900; font-size:1.15rem;">Rs. 249 <span style="font-size:0.8rem; color:var(--muted); text-decoration:line-through; font-weight:600; margin-left:6px;">Rs. 499</span></div>
-                </div>
-            </a>
-            <a href="estailo.html" style="text-decoration:none; color:inherit; display:block; min-width: 260px; max-width: 290px;">
-                <div class="review-card" style="padding: 15px; text-align: center;">
-                    <img src="https://estailofashion.com/cdn/shop/files/4_59e5e57f-431f-4287-ab7e-eeb4fd33b0b4.jpg?v=1755532783&width=300" 
-                         alt="Estailo Fashion" style="width:100%; height:220px; object-fit:cover; border-radius:12px; margin-bottom:12px;">
-                    <h4 style="font-family:'Nunito', sans-serif; font-weight:800; font-size:1.05rem; margin-bottom:6px; min-height: 44px; display:flex; align-items:center; justify-content:center;">Premium Estailo Fashion</h4>
-                    <div style="color:var(--deep-pink); font-weight:900; font-size:1.15rem;">Rs. 149 <span style="font-size:0.8rem; color:var(--muted); text-decoration:line-through; font-weight:600; margin-left:6px;">Rs. 399</span></div>
-                </div>
-            </a>
+    <section class="recommendations-section fade-up">
+        <div style="max-width: 1180px; margin: 0 auto;">
+            <h2 class="reviews-title" style="margin-bottom: 30px; text-align: center;">You May Also Like ✨</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;">
+                
+                <a href="index.html" style="text-decoration:none; color:inherit;">
+                    <div class="rec-card">
+                        <span class="rec-badge">Best Seller</span>
+                        <img src="https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300" class="rec-img" alt="Bunny Plushie">
+                        <h4 style="font-weight:800; font-size:1rem; margin-top:8px;">Bunny Plushie Pouch</h4>
+                        <div style="color:var(--deep-pink); font-weight:900; font-size:1.1rem;">Rs. 99 <span style="font-size:0.75rem; color:var(--muted); text-decoration:line-through;">Rs. 1,099</span></div>
+                        <button class="rec-btn">View Item ➔</button>
+                    </div>
+                </a>
+
+                <a href="jhumka.html" style="text-decoration:none; color:inherit;">
+                    <div class="rec-card">
+                        <span class="rec-badge">Trending</span>
+                        <img src="https://coveradda24.myshopify.com/cdn/shop/files/WhatsAppImage2026-01-15at1.33.34PM_fd3e5de8-1d97-4501-95ee-af4d879c958d.jpg?v=1768652364&width=300" class="rec-img" alt="Jhumka Box">
+                        <h4 style="font-weight:800; font-size:1rem; margin-top:8px;">Jhumka Box - 16 Pairs</h4>
+                        <div style="color:var(--deep-pink); font-weight:900; font-size:1.1rem;">Rs. 199 <span style="font-size:0.75rem; color:var(--muted); text-decoration:line-through;">Rs. 1,599</span></div>
+                        <button class="rec-btn">View Item ➔</button>
+                    </div>
+                </a>
+
+                <a href="bangles.html" style="text-decoration:none; color:inherit;">
+                    <div class="rec-card">
+                        <span class="rec-badge">Top Pick</span>
+                        <img src="https://coveradda24.myshopify.com/cdn/shop/files/647450007_918745181206935_5826188398344680965_n.jpg?v=1773213151&width=300" class="rec-img" alt="Bangles Box">
+                        <h4 style="font-weight:800; font-size:1rem; margin-top:8px;">Bangles Set with Box</h4>
+                        <div style="color:var(--deep-pink); font-weight:900; font-size:1.1rem;">Rs. 249 <span style="font-size:0.75rem; color:var(--muted); text-decoration:line-through;">Rs. 3,000</span></div>
+                        <button class="rec-btn">View Item ➔</button>
+                    </div>
+                </a>
+
+                <a href="estailo.html" style="text-decoration:none; color:inherit;">
+                    <div class="rec-card">
+                        <span class="rec-badge">New Arrival</span>
+                        <img src="https://estailofashion.com/cdn/shop/files/4_59e5e57f-431f-4287-ab7e-eeb4fd33b0b4.jpg?v=1755532783&width=300" class="rec-img" alt="Estailo Fashion">
+                        <h4 style="font-weight:800; font-size:1rem; margin-top:8px;">Premium Estailo Fashion</h4>
+                        <div style="color:var(--deep-pink); font-weight:900; font-size:1.1rem;">Rs. 149 <span style="font-size:0.75rem; color:var(--muted); text-decoration:line-through;">Rs. 1,299</span></div>
+                        <button class="rec-btn">View Item ➔</button>
+                    </div>
+                </a>
+
+            </div>
         </div>
     </section>
 
@@ -263,25 +274,8 @@
                 </button>
             </div>
 
-            <!-- Step 3: UPI Secure Payment -->
-            <div id="checkoutStep3_UPI" style="display: none;">
-                <p style="margin-bottom:15px;color:var(--muted);font-size:0.9rem;">Step 3 of 3: Scan & Pay</p>
-                <div class="payment-amount-box">
-                    <span style="font-size:0.9rem;color:var(--muted);">Total Amount</span>
-                    <strong id="finalAmountStr">Rs. 199</strong>
-                </div>
-                
-                <p style="text-align:center;margin-bottom:10px;font-weight:700;">Scan to Pay</p>
-                <div id="paymentQR" class="qr-container"></div>
-                
-                <p style="text-align:center;margin:10px 0;font-weight:600;color:var(--muted);">OR</p>
-                
-                <a href="#" id="upiLinkBtn" class="btn-buy" style="width:100%;text-decoration:none;display:flex;justify-content:center;">
-                    Pay via UPI App 📱
-                </a>
-                
-                <button class="btn-cart" style="width:100%;margin-top:10px;background:#f0dde5;color:var(--text);box-shadow:none;" onclick="goBackToMethods()">
-                    ⬅️ Change Payment Method
+                <button class="btn-cart" style="width:100%;margin-top:10px;background:#f0dde5;color:var(--text);box-shadow:none;" onclick="cancelPaymentSelect()">
+                    ⬅️ Back to Address
                 </button>
             </div>
 
@@ -304,7 +298,7 @@
         <p style="color:var(--muted); font-size:0.8rem;">© 2024 All Rights Reserved.</p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="common.js"></script>
     <script src="jhumka.js"></script>
 </body>

@@ -6,7 +6,6 @@ const images = [
 
   let currentImg = 0;
   let qty = 1;
-  let cartCount = 0;
 
   // Build thumbnails
   const thumbsEl = document.getElementById('thumbnails');
@@ -43,18 +42,11 @@ const images = [
   }
 
   function addToCart() {
-    cartCount += qty;
-    const cartCountEl = document.getElementById('cartCount');
-    if (cartCountEl) cartCountEl.textContent = cartCount;
+    addToCartGlobal('estailo-premium', 'Premium Estailo Fashion', 149, 'https://estailofashion.com/cdn/shop/files/4_59e5e57f-431f-4287-ab7e-eeb4fd33b0b4.jpg?v=1755532783&width=300', qty);
     
-    // Enable Buy Now
-    const buyBtn = document.getElementById('btnBuyNow');
-    if (buyBtn) {
-        buyBtn.disabled = false;
-        buyBtn.style.animation = 'pulseBuy 1.2s 2 ease-in-out';
-    }
-
+    // UI Feedback
     const btn = document.querySelector('.btn-cart');
+    if (typeof updateCartBadge === 'function') updateCartBadge();
     if (btn) {
       btn.textContent = '✅ Added to Cart!';
       btn.style.background = '#4caf7d';
@@ -206,7 +198,7 @@ const images = [
     document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
     document.getElementById('opt' + method).classList.add('selected');
     
-    let finalAmt = qty * PRICE_PER_ITEM;
+    let finalAmt = getCartTotal();
     if(method === 'COD') {
         const trustNote = document.getElementById('codTrustNote');
         if(trustNote) trustNote.style.display = 'block';
@@ -222,7 +214,7 @@ const images = [
     const loadingEl = document.getElementById('checkoutLoading');
     if(loadingEl) loadingEl.style.display = 'none';
     
-    let baseAmt = qty * PRICE_PER_ITEM;
+    let baseAmt = getCartTotal();
     document.getElementById('methodAmountStr').textContent = `Rs. ${baseAmt}`;
     
     selectPaymentMethod('UPI'); // default
@@ -230,7 +222,7 @@ const images = [
   }
 
   function proceedToFinal() {
-    let finalAmt = qty * PRICE_PER_ITEM;
+    let finalAmt = getCartTotal();
     let upiNote = `Order%20for%20`;
 
     if (selectedMethod === 'COD') {
@@ -238,28 +230,19 @@ const images = [
         upiNote = `COD%20Shipping%20for%20`;
     }
 
-    if (selectedMethod === 'UPI' || selectedMethod === 'COD') {
+    if (selectedMethod === 'UPI' || selectedMethod === 'Card') {
         const name = document.getElementById('custName').value.trim();
-        const safeName = encodeURIComponent(name);
-        document.getElementById('finalAmountStr').textContent = `Rs. ${finalAmt}` + (selectedMethod === 'COD' ? " (Advance Shipping)" : "");
+        const phone = document.getElementById('custPhone').value.trim();
         
-        const upiLink = `upi://pay?pa=yoshivam@fam&pn=Plushieland&am=${finalAmt}&tn=${upiNote}${safeName}`;
-        document.getElementById('upiLinkBtn').href = upiLink;
-        
-        const qrContainer = document.getElementById('paymentQR');
-        qrContainer.innerHTML = ''; 
-        if (typeof QRCode !== 'undefined') {
-          new QRCode(qrContainer, {
-              text: upiLink, width: 150, height: 150,
-              colorDark : "#e07090", colorLight : "#ffffff",
-              correctLevel : QRCode.CorrectLevel.H
-          });
-        }
-        document.getElementById('checkoutStep2').style.display = 'none';
-        document.getElementById('checkoutStep3_UPI').style.display = 'block';
+        // Use Global Razorpay
+        payWithRazorpay(finalAmt, name, phone);
     } 
-    else if (selectedMethod === 'Card') {
-        alert("Credit/Debit Card servers are currently facing downtime. Please use UPI or COD.");
+    else if (selectedMethod === 'COD') {
+        // COD logic (Direct Success or Shipping Advance)
+        alert("COD requires ₹59 Shipping Advance. Opening Secure Payment...");
+        const name = document.getElementById('custName').value.trim();
+        const phone = document.getElementById('custPhone').value.trim();
+        payWithRazorpay(59, name, phone);
     }
   }
 

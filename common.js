@@ -25,6 +25,9 @@ const firebaseConfig = {
 let confirmationResult = null;
 let isMockMode = true; // Default to mock mode until real keys are provided
 
+// RAZORPAY CONFIG
+const RZP_KEY_ID = "rzp_test_SXr2WUwQxlLtZo";
+
 /**
  * Initializes Firebase and Auth UI
  */
@@ -39,7 +42,9 @@ function initAuth() {
     }
 
     injectAuthModal();
+    injectCartModal(); 
     checkLoginStatus();
+    updateCartBadge();
 
     // NEW: Auto-open modal for new/non-logged-in users
     const userPhone = localStorage.getItem('plushieUser');
@@ -87,6 +92,44 @@ function injectAuthModal() {
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+/**
+ * Injects the Slide-in Cart Modal
+ */
+function injectCartModal() {
+    if (document.getElementById('cartModal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'cartModal';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="cart-drawer" onclick="event.stopPropagation()">
+            <div class="cart-header">
+                <h2 style="font-family: 'Pacifico', cursive; color: var(--deep-pink); margin: 0;">Your Cart 🛍️</h2>
+                <button class="cart-remove-btn" onclick="closeCart()" style="width:36px;height:36px;font-size:1.2rem;">✕</button>
+            </div>
+            
+            <div class="cart-items-list" id="cartItemsContainer">
+                <!-- Items injected here -->
+            </div>
+
+            <div class="cart-footer">
+                <div class="cart-total-row">
+                    <span>Total Amount:</span>
+                    <span id="cartTotalText">Rs. 0</span>
+                </div>
+                <button class="btn-buy" style="width:100%; border-radius:12px; padding:18px; font-size:1.1rem;" onclick="proceedToCheckoutFromCart()">
+                    Checkout Now ⚡
+                </button>
+                <button class="btn-continue-shopping" onclick="closeCart()">
+                    Keep Shopping 🐰
+                </button>
+            </div>
+        </div>
+    `;
+    modal.onclick = closeCart;
+    document.body.appendChild(modal);
 }
 
 let authMode = 'signIn';
@@ -413,23 +456,155 @@ function setupDeliveryDate() {
 }
 
 /**
- * Global Cart Button Handler
- * Opens checkout if items exist, or alerts if empty.
+ * Cart Data Management
  */
-function openCart() {
-    const badge = document.getElementById('cartCount');
-    const count = badge ? parseInt(badge.textContent) || 0 : 0;
+function getCart() {
+    return JSON.parse(localStorage.getItem('plushie_cart') || '[]');
+}
 
-    if (count > 0) {
-        // Try calling the page-specific openCheckout function
-        if (typeof openCheckout === 'function') {
-            openCheckout();
-        } else {
-            // Manual fallback if function not found
-            const modal = document.getElementById('checkoutModal');
-            if (modal) modal.classList.add('open');
-        }
+function saveCart(cart) {
+    localStorage.setItem('plushie_cart', JSON.stringify(cart));
+    updateCartBadge();
+}
+
+function getCartTotal() {
+    const cart = getCart();
+    return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+}
+
+function addToCartGlobal(id, name, price, img, quantity = 1) {
+    const cart = getCart();
+    const existing = cart.find(i => i.id === id);
+    
+    if (existing) {
+        existing.qty += quantity;
     } else {
-        alert("Your cart is empty! 🛍️\nAdd some plushies to continue.");
+        cart.push({ id, name, price, img, qty: quantity });
+    }
+    
+    saveCart(cart);
+    renderCart();
+    openCart(); // Show drawer immediately
+}
+
+function removeFromCart(id) {
+    let cart = getCart();
+    cart = cart.filter(i => i.id !== id);
+    saveCart(cart);
+    renderCart();
+}
+
+function updateCartBadge() {
+    const cart = getCart();
+    const count = cart.reduce((acc, item) => acc + item.qty, 0);
+    const badge = document.getElementById('cartCount');
+    
+    if (badge) {
+        badge.textContent = count;
+        // Force flex display if count > 0, otherwise hide
+        if (count > 0) {
+            badge.style.display = 'flex';
+            badge.style.opacity = '1';
+        } else {
+            badge.style.display = 'none';
+            badge.style.opacity = '0';
+        }
+        console.log(`Badge updated: ${count}`);
+    }
+}
+
+function renderCart() {
+    const cart = getCart();
+    const container = document.getElementById('cartItemsContainer');
+    const totalEl = document.getElementById('cartTotalText');
+    
+    if (!container) return;
+    
+    if (cart.length === 0) {
+        container.innerHTML = '<div class="cart-empty-msg">Your cart is empty! <br> Add some items to start shopping. 🛍️</div>';
+        totalEl.textContent = "Rs. 0";
+        return;
+    }
+
+    let total = 0;
+    container.innerHTML = cart.map(item => {
+        total += item.price * item.qty;
+        return `
+            <div class="cart-item">
+                <img src="${item.img}" class="cart-item-img" alt="${item.name}">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <div class="price">Rs. ${item.price} x ${item.qty}</div>
+                </div>
+                <button class="cart-remove-btn" onclick="removeFromCart('${item.id}')" title="Remove">🗑️</button>
+            </div>
+        `;
+    }).join('');
+    
+    if (totalEl) totalEl.textContent = `Rs. ${total}`;
+}
+
+function openCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+        renderCart();
+        modal.classList.add('open');
+    }
+}
+
+function closeCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal) modal.classList.remove('open');
+}
+
+function proceedToCheckoutFromCart() {
+    closeCart();
+    if (typeof openCheckout === 'function') {
+        openCheckout();
+    } else {
+        const modal = document.getElementById('checkoutModal');
+        if (modal) modal.classList.add('open');
+    }
+}
+
+/**
+ * Global Razorpay Payment Handler
+ */
+function payWithRazorpay(amount, name, phone, email = "customer@sachindeliveryhub.in") {
+    const options = {
+        "key": RZP_KEY_ID,
+        "amount": amount * 100, // Amount in paise
+        "currency": "INR",
+        "name": "Sachin's Delivery Hub",
+        "description": "Secure Gift Purchase",
+        "image": "https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=100",
+        "handler": function (response){
+            console.log("Payment Successful:", response.razorpay_payment_id);
+            // Call the page-specific finishOrder function
+            if (typeof finishOrder === 'function') {
+                finishOrder();
+            } else {
+                alert("Payment Successful! Your Order ID: " + response.razorpay_payment_id);
+            }
+        },
+        "prefill": {
+            "name": name,
+            "email": email,
+            "contact": phone
+        },
+        "theme": {
+            "color": "#e07090"
+        }
+    };
+    
+    try {
+        const rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+            alert("Payment Failed: " + response.error.description);
+        });
+        rzp1.open();
+    } catch (e) {
+        console.error("Razorpay Error:", e);
+        alert("Payment gateway error. Please try again.");
     }
 }
