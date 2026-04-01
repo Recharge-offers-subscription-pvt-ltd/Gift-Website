@@ -108,15 +108,15 @@ const images = [
 
   function openCheckout() {
     // Add/Sync current product in cart
-    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Bunny Plushie Pouch';
-    const productPrice = PRICE_PER_ITEM;
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
+    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 999);
     const productImg = document.getElementById('mainImage')?.src || '';
-    const productId = 'bunny-pouch-' + Date.now();
+    const productId = 'product-' + Date.now();
     
     addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
     
-    // Show quick payment dialog
-    showQuickPaymentDialog(productPrice);
+    // Redirect to checkout.html with payment method selection
+    window.location.href = 'checkout.html';
   }
 
   function closeCheckout() {
