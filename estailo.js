@@ -68,12 +68,12 @@ const images = [
 
   // Reviews
   const reviews = [
-    { name: 'Rohan G.', stars: 5, text: 'The fabric is surprisingly high-end for the price. Fits perfectly and looks sleek.' },
-    { name: 'Megha S.', stars: 5, text: 'Wore this on a date and got so many compliments! Stylish, trendy, and so comfy.' },
-    { name: 'Arjun P.', stars: 4, text: 'Great everyday fashion. The minimalist design is exactly what I was looking for.' },
-    { name: 'Simran K.', stars: 5, text: 'Quality is top-notch. It did not shrink or fade after washing. Very satisfied!' },
-    { name: 'Vikram A.', stars: 5, text: 'A trendy addition to my wardrobe. Fast shipping and the fit is spot on.' },
-    { name: 'Sakshi M.', stars: 4, text: 'Love the modern aesthetic! It goes well with almost any accessory.' },
+    { name: 'Rohan G.', stars: 5, text: '✨ Fabric is top-tier from Plushieland! Fits perfectly and looks super sleek. Amazing value!' },
+    { name: 'Megha S.', stars: 5, text: '💝 Wore on a date & got so many compliments from Plushieland Gift Store! Stylish & comfy!' },
+    { name: 'Arjun P.', stars: 5, text: '⭐ Everyday fashion perfection! The minimalist design from Plushieland is exactly what I wanted.' },
+    { name: 'Simran K.', stars: 5, text: '🌟 Quality is top-notch from Gift Delivery Discount Hub. Did not shrink/fade even after washing!' },
+    { name: 'Vikram A.', stars: 5, text: '🚚 Trendy wardrobe addition! Fast 24-hour delivery by Plushieland & perfect fit guaranteed!' },
+    { name: 'Sakshi M.', stars: 5, text: '💥 Modern aesthetic from Plushieland! Goes perfectly with any accessory. Highly recommended!' },
   ];
 
   const grid = document.getElementById('reviewsGrid');

@@ -1095,3 +1095,229 @@ body.user-logged-in #authModal.modal-overlay { backdrop-filter: none; display: n
     background: linear-gradient(135deg, #f1c40f, #d4af37);
     transform: translateY(-1px);
 }
+
+/* MOBILE OPTIMIZATION FOR RECOMMENDATION CARDS */
+@media (max-width: 768px) {
+    .recommendations-section > div > div {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+    .rec-card {
+        padding: 12px;
+    }
+    .rec-img {
+        margin-bottom: 4px;
+    }
+    .rec-title {
+        font-size: 0.9rem;
+        height: auto;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+    .rec-price {
+        font-size: 1rem;
+        margin: 6px 0 12px;
+    }
+    .rec-btn {
+        padding: 8px;
+        font-size: 0.75rem;
+        height: 38px;
+    }
+}
+
+@media (max-width: 480px) {
+    .recommendations-section > div > div {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    .recommendations-section {
+        padding: 30px 12px !important;
+    }
+    .rec-card {
+        padding: 10px;
+        border-radius: 12px;
+    }
+    .rec-img {
+        aspect-ratio: auto;
+        max-height: 120px;
+    }
+    .rec-title {
+        font-size: 0.8rem;
+        margin-top: 6px;
+        height: auto;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+    .rec-price {
+        font-size: 0.9rem;
+        margin: 4px 0 8px;
+    }
+    .rec-price span {
+        font-size: 0.7rem;
+    }
+    .rec-badge {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+    .rec-btn-group {
+        gap: 6px;
+    }
+    .rec-btn {
+        padding: 6px;
+        font-size: 0.7rem;
+        height: 32px;
+    }
+}
+
+/* FLASH SALE COMPONENT */
+.flash-sale-box {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffebeb 100%);
+    border: 2px solid #ffccd5;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 15px 0;
+    box-shadow: 0 8px 24px rgba(255, 77, 109, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.flash-sale-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+    transform: skewX(-20deg);
+    animation: flashShine 3s infinite;
+}
+
+@keyframes flashShine {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+}
+
+.flash-sale-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    color: #d81159;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.flash-icon {
+    font-size: 1.3rem;
+    animation: pulseIcon 1s infinite alternate;
+}
+
+@keyframes pulseIcon {
+    from { transform: scale(1); }
+    to { transform: scale(1.2); }
+}
+
+.flash-countdown {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.time-block {
+    background: #d81159;
+    color: white;
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 55px;
+    box-shadow: 0 4px 10px rgba(216, 17, 89, 0.3);
+}
+
+.t-val {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.t-lbl {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 4px;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+.time-colon {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #d81159;
+    animation: blinkColon 1s infinite;
+}
+
+@keyframes blinkColon {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.flash-progress-container {
+    margin-top: 5px;
+}
+
+.flash-progress-bar {
+    height: 8px;
+    background: #ffccd5;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.flash-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff4a6b, #d81159);
+    border-radius: 10px;
+    position: relative;
+}
+
+.flash-progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+    background-size: 15px 15px;
+    animation: moveStripes 1s linear infinite;
+}
+
+@keyframes moveStripes {
+    0% { background-position: 0 0; }
+    100% { background-position: 15px 0; }
+}
+
+.flash-stock-text {
+    font-size: 0.82rem;
+    color: #d81159;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.flash-stock-text::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: #d81159;
+    border-radius: 50%;
+    animation: pulseDot 1s infinite;
+}
+
+@keyframes pulseDot {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.5; }
+}

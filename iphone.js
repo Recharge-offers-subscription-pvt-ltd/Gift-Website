@@ -68,10 +68,10 @@ const images = [
 
   // Reviews
   const reviews = [
-    { name: 'Rohan J.', stars: 5, text: 'The Cosmic Orange is just stunning. Performances is out of this world.', image: 'https://rukminim2.flixcart.com/blobio/649/649/imr/blobio-imr_a403562d39b54b3aa5df148d3f6e9f33.jpg?q=80' },
-    { name: 'Kritika M.', stars: 5, text: 'Got this in pre-sale at Sachin Delivery Hub. Incredible offer for 1TB variant.', image: 'https://rukminim2.flixcart.com/blobio/192/192/imr/blobio-imr_410c2f9f41ff41249224529f0f142d72.jpeg?q=80' },
-    { name: 'Vikram S.', stars: 5, text: 'Fast delivery by Sachin team. Original sealed box. Highly recommended.', image: 'https://rukminim2.flixcart.com/blobio/192/192/imr/blobio-imr_89589e4f49f04b1d994ee0d371130735.jpg?q=80' },
-    { name: 'Siddharth M.', stars: 5, text: 'The camera quality is absolutely mind-blowing. Professional shots every time.', image: 'https://rukminim2.flixcart.com/blobio/192/192/imr/blobio-imr_7dc9eab48080446998e5a10ad7765fec.jpeg?q=80' }
+    { name: 'Rohan J.', stars: 5, text: 'The Cosmic Orange is just stunning. Performances is out of this world. Great service from Plushieland!', image: 'https://rukminim2.flixcart.com/blobio/649/649/imr/blobio-imr_a403562d39b54b3aa5df148d3f6e9f33.jpg?q=80' },
+    { name: 'Kritika M.', stars: 5, text: 'Got this in pre-sale at Plushieland Gift Delivery Discount Hub. Incredible offer for 1TB variant!', image: 'https://rukminim2.flixcart.com/blobio/192/192/imr/blobio-imr_410c2f9f41ff41249224529f0f142d72.jpeg?q=80' },
+    { name: 'Vikram S.', stars: 5, text: '24-hour VIP Express Delivery by Plushieland Gift Store. Original sealed box. Highly recommended!', image: 'https://rukminim2.flixcart.com/blobio/192/192/imr/blobio-imr_89589e4f49f04b1d994ee0d371130735.jpg?q=80' },
+    { name: 'Siddharth M.', stars: 5, text: 'Outstanding service from Gift Delivery Discount Hub. The camera quality is absolutely mind-blowing!', image: 'https://rukminim2.flixcart.com/blobio/192/192/imr/blobio-imr_7dc9eab48080446998e5a10ad7765fec.jpeg?q=80' }
   ];
 
   const grid = document.getElementById('reviewsGrid');

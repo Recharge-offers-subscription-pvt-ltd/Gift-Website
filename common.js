@@ -480,9 +480,6 @@ function closeAd() {
  * Initializes the 24-hour countdown timer
  */
 function initCountdown() {
-    const countdownEl = document.getElementById('countdown');
-    if (!countdownEl) return;
-
     function updateTimer() {
         const now = new Date();
         
@@ -502,9 +499,22 @@ function initCountdown() {
         const minutesEl = document.getElementById('minutes');
         const secondsEl = document.getElementById('seconds');
 
-        if (hoursEl) hoursEl.textContent = String(h).padStart(2, '0');
-        if (minutesEl) minutesEl.textContent = String(m).padStart(2, '0');
-        if (secondsEl) secondsEl.textContent = String(s).padStart(2, '0');
+        // Flash Sale Elements
+        const fsHours = document.getElementById('fs-hours');
+        const fsMinutes = document.getElementById('fs-minutes');
+        const fsSeconds = document.getElementById('fs-seconds');
+
+        const hh = String(h).padStart(2, '0');
+        const mm = String(m).padStart(2, '0');
+        const ss = String(s).padStart(2, '0');
+
+        if (hoursEl) hoursEl.textContent = hh;
+        if (minutesEl) minutesEl.textContent = mm;
+        if (secondsEl) secondsEl.textContent = ss;
+
+        if (fsHours) fsHours.textContent = hh;
+        if (fsMinutes) fsMinutes.textContent = mm;
+        if (fsSeconds) fsSeconds.textContent = ss;
     }
 
     // Initial call and interval

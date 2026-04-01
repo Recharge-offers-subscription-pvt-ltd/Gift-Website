@@ -67,12 +67,12 @@ const images = [
 
   // Reviews
   const reviews = [
-    { name: 'Amit B.', stars: 5, text: 'A fantastic collection of traditional earrings. My sister loved the variety and quality.', image: 'https://judgeme.imgix.net/fubs/1769869110__inbound8238139474920189397__original.jpg?auto=format&w=160' },
-    { name: 'Pooja T.', stars: 5, text: 'So many options! I have a pair for every outfit now. The designs are really authentic.', image: 'https://judgeme.imgix.net/fubs/1765782776__whatsappimage2025-12-05at125612am__original.jpeg?auto=format&w=160' },
-    { name: 'Rahul V.', stars: 4, text: 'Bought this for my mother. She really appreciated the traditional Indian craftsmanship.', image: 'https://judgeme.imgix.net/fubs/1768391636__88919__original.jpg?auto=format&w=160' },
-    { name: 'Shweta D.', stars: 5, text: 'The variety is amazing for this price. Perfect for Navratri, Diwali, and weddings.' },
-    { name: 'Vinay K.', stars: 5, text: 'Packaged very well. None of the pieces were damaged. Excellent value for 16 pairs.' },
-    { name: 'Neha J.', stars: 5, text: 'Very happy with the 16 unique designs. They all look stunning and high-end.' },
+    { name: 'Amit B.', stars: 5, text: '🎁 Fantastic collection from Plushieland! My sister loved the variety and quality of these jhumkas.', image: 'https://judgeme.imgix.net/fubs/1769869110__inbound8238139474920189397__original.jpg?auto=format&w=160' },
+    { name: 'Pooja T.', stars: 5, text: '⭐ So many options from Gift Delivery Discount Hub! I have a pair for every outfit now. Authentic designs!', image: 'https://judgeme.imgix.net/fubs/1765782776__whatsappimage2025-12-05at125612am__original.jpeg?auto=format&w=160' },
+    { name: 'Rahul V.', stars: 5, text: '💝 Bought from Plushieland for my mother. She appreciated the traditional Indian craftsmanship so much!', image: 'https://judgeme.imgix.net/fubs/1768391636__88919__original.jpg?auto=format&w=160' },
+    { name: 'Shweta D.', stars: 5, text: '🌟 Amazing variety from Plushieland Gift Store for this price. Perfect for Navratri, Diwali & weddings!' },
+    { name: 'Vinay K.', stars: 5, text: '🚚 Packaged perfectly by Plushieland. VIP 24-hour delivery. Excellent value for 16 unique pairs!' },
+    { name: 'Neha J.', stars: 5, text: '✨ Very happy with 16 stunning designs from Gift Delivery Discount Hub. All look high-end & beautiful!' },
   ];
 
   const grid = document.getElementById('reviewsGrid');

@@ -71,12 +71,12 @@ const images = [
 
   // Reviews
   const reviews = [
-    { name: 'Aarav K.', stars: 5, text: 'Gifted this to my sister and she loves how it turns into a strawberry! Clever design.' },
-    { name: 'Sneha P.', stars: 5, text: 'The softest plushie I have ever owned. Perfect for desk decoration and very huggable.' },
-    { name: 'Ishaan M.', stars: 5, text: 'My son carries his "bunny-berry" everywhere. High quality and safe for kids.' },
-    { name: 'Ananya S.', stars: 4, text: 'Super cute and matches my room perfectly. The reversible zipper is very smooth.' },
-    { name: 'Kabir V.', stars: 5, text: 'Bought this as a surprise gift, and it was a hit! Worth every rupee for the quality.' },
-    { name: 'Diya R.', stars: 5, text: 'Arrived quickly in beautiful packaging. Soft, cuddly, and looks exactly like the photos!' },
+    { name: 'Aarav K.', stars: 5, text: '🎁 Ordered from Plushieland Gift Store - Gifted to my sister and she loves it! Clever reversible design with amazing quality!' },
+    { name: 'Sneha P.', stars: 5, text: '⭐ The softest plushie ever! Plushieland Gift Delivery Discount Hub delivers such premium products. Perfect for any occasion!' },
+    { name: 'Ishaan M.', stars: 5, text: '24-hour VIP Express Delivery at my doorstep! My son loves his cuddly companion from Plushieland. Highly recommended!' },
+    { name: 'Ananya S.', stars: 5, text: '💝 Sum cute and matches perfectly with my décor. The reversible zipper quality from Plushieland is exceptional!' },
+    { name: 'Kabir V.', stars: 5, text: '✅ Surprise gift from Gift Delivery Discount Hub - It was a huge hit! Worth every rupee for the premium quality!' },
+    { name: 'Diya R.', stars: 5, text: '🚚 Fast delivery from Plushieland Gift Store. Beautiful packaging, soft, cuddly, and looks exactly like photos. Outstanding!' },
   ];
 
   const grid = document.getElementById('reviewsGrid');

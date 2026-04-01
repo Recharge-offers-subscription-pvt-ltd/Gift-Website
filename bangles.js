@@ -74,12 +74,12 @@ const images = [
 
   // Reviews
   const reviews = [
-    { name: 'Rajesh K.', stars: 5, text: 'The Kashmiri ghungroo work is exquisite. My wife loved the traditional look.' },
-    { name: 'Kavita S.', stars: 5, text: 'Love the personalized box! It makes the gift so much more special and unique.' },
-    { name: 'Sunil M.', stars: 4, text: 'The gold plating looks very premium. Perfect choice for the wedding season.' },
-    { name: 'Preeti G.', stars: 5, text: 'Stunning collection. My daughter absolutely loved the variety of colors and textures.' },
-    { name: 'Manoj V.', stars: 5, text: 'High quality and very elegant. The custom name engraving is a very nice touch.' },
-    { name: 'Sunita R.', stars: 5, text: 'Absolutely beautiful. The ghungroos add a lovely traditional sound and charm.' },
+    { name: 'Rajesh K.', stars: 5, text: '👑 Kashmiri ghungroo work is exquisite! My wife loved the traditional look from Plushieland Gift Store.' },
+    { name: 'Kavita S.', stars: 5, text: '💝 Personalized box from Gift Delivery Discount Hub made the gift so much more special and unique!' },
+    { name: 'Sunil M.', stars: 5, text: '✨ Gold plating looks premium! Perfect wedding season choice from Plushieland. VIP delivery too!' },
+    { name: 'Preeti G.', stars: 5, text: '🌟 Stunning collection! My daughter absolutely loved the variety from Plushieland Gift Store.' },
+    { name: 'Manoj V.', stars: 5, text: '💎 High quality & very elegant. Custom engraving from Plushieland is an excellent touch. Highly recommended!' },
+    { name: 'Sunita R.', stars: 5, text: '🎵 Absolutely beautiful ghungroos! 24-hr delivery by Plushieland Gift Store. Traditional charm with modern service!' },
   ];
 
   const grid = document.getElementById('reviewsGrid');
