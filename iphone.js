@@ -42,7 +42,7 @@ const images = [
   }
 
   function addToCart() {
-    addToCartGlobal('iphone-17-pro', 'iPhone 17 Pro 1TB', 999, 'https://www.myimaginestore.com/media/catalog/product/cache/4a48ac28cbb6e9c41470e5be5a6d3043/i/p/iphone_17_pro_cosmic_orange_pdp_image_position_1__en-in_1.jpg', qty);
+    addToCartGlobal('iphone-17-pro', 'iPhone 17 Pro 1TB', 99999, 'https://www.myimaginestore.com/media/catalog/product/cache/4a48ac28cbb6e9c41470e5be5a6d3043/i/p/iphone_17_pro_cosmic_orange_pdp_image_position_1__en-in_1.jpg', qty);
     
     // UI Feedback
     const btn = document.querySelector('.btn-cart');
@@ -101,7 +101,7 @@ const images = [
   }
 
   // --- CHECKOUT LOGIC ---
-  const PRICE_PER_ITEM = 999;
+  const PRICE_PER_ITEM = 99999;
 
   function openCheckout() {
     // Add current product to cart
