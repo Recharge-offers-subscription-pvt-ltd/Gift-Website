@@ -104,22 +104,16 @@ const images = [
   const PRICE_PER_ITEM = 149;
 
   function openCheckout() {
-    // Add/Sync Estailo in cart silently before opening checkout
-    addToCartGlobal('estailo-premium', 'Premium Estailo Fashion', 149, 'https://estailofashion.com/cdn/shop/files/4_59e5e57f-431f-4287-ab7e-eeb4fd33b0b4.jpg?v=1755532783&width=300', qty, true, true);
+    // Add current product to cart
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
+    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 149);
+    const productImg = document.getElementById('mainImage')?.src || '';
+    const productId = 'product-' + Date.now();
     
-    document.getElementById('checkoutModal').classList.add('open');
-    document.getElementById('checkoutStep1').style.display = 'block';
-    document.getElementById('checkoutStep2').style.display = 'none';
-
-    // NEW: Pre-fill Name & Phone if logged in
-    const userPhone = localStorage.getItem('plushieUser');
-    const userName = localStorage.getItem('plushieUserName');
-    if (userPhone) {
-        const custName = document.getElementById('custName');
-        const custPhone = document.getElementById('custPhone');
-        if (custName && userName) custName.value = userName;
-        if (custPhone) custPhone.value = userPhone.replace("+91", "");
-    }
+    addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
+    
+    // Redirect to checkout.html with payment method selection
+    window.location.href = 'checkout.html';
   }
 
   function closeCheckout() {

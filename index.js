@@ -107,22 +107,16 @@ const images = [
   const PRICE_PER_ITEM = 99;
 
   function openCheckout() {
-    // Add/Sync Bunny in cart silently before opening checkout
-    addToCartGlobal('bunny-pouch', 'Bunny Plushie Pouch', 99, 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300', qty, true, true);
+    // Add/Sync current product in cart
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
+    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 999);
+    const productImg = document.getElementById('mainImage')?.src || '';
+    const productId = 'product-' + Date.now();
     
-    document.getElementById('checkoutModal').classList.add('open');
-    document.getElementById('checkoutStep1').style.display = 'block';
-    document.getElementById('checkoutStep2').style.display = 'none';
+    addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
     
-    // NEW: Pre-fill Name & Phone if logged in
-    const userPhone = localStorage.getItem('plushieUser');
-    const userName = localStorage.getItem('plushieUserName');
-    if (userPhone) {
-        const custName = document.getElementById('custName');
-        const custPhone = document.getElementById('custPhone');
-        if (custName && userName) custName.value = userName;
-        if (custPhone) custPhone.value = userPhone.replace("+91", "");
-    }
+    // Redirect to checkout.html with payment method selection
+    window.location.href = 'checkout.html';
   }
 
   function closeCheckout() {

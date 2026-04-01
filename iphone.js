@@ -104,22 +104,16 @@ const images = [
   const PRICE_PER_ITEM = 999;
 
   function openCheckout() {
-    // Add/Sync iPhone in cart silently before opening checkout
-    addToCartGlobal('iphone-17-pro', 'iPhone 17 Pro 1TB', 999, 'https://www.myimaginestore.com/media/catalog/product/cache/4a48ac28cbb6e9c41470e5be5a6d3043/i/p/iphone_17_pro_cosmic_orange_pdp_image_position_1__en-in_1.jpg', qty, true, true);
+    // Add current product to cart
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
+    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 999);
+    const productImg = document.getElementById('mainImage')?.src || '';
+    const productId = 'product-' + Date.now();
     
-    document.getElementById('checkoutModal').classList.add('open');
-    document.getElementById('checkoutStep1').style.display = 'block';
-    document.getElementById('checkoutStep2').style.display = 'none';
+    addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
     
-    // NEW: Pre-fill Name & Phone if logged in
-    const userPhone = localStorage.getItem('plushieUser');
-    const userName = localStorage.getItem('plushieUserName');
-    if (userPhone) {
-        const custName = document.getElementById('custName');
-        const custPhone = document.getElementById('custPhone');
-        if (custName && userName) custName.value = userName;
-        if (custPhone) custPhone.value = userPhone.replace("+91", "");
-    }
+    // Redirect to checkout.html with payment method selection
+    window.location.href = 'checkout.html';
   }
 
   function closeCheckout() {

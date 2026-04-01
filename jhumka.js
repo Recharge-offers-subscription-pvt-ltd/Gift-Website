@@ -105,22 +105,16 @@ const images = [
   const PRICE_PER_ITEM = 199;
 
   function openCheckout() {
-    // Add/Sync Jhumka in cart silently before opening checkout
-    addToCartGlobal('jhumka-box', 'Jhumka Box - 16 Pairs', 199, 'https://coveradda24.myshopify.com/cdn/shop/files/WhatsAppImage2026-01-15at1.33.34PM_fd3e5de8-1d97-4501-95ee-af4d879c958d.jpg?v=1768652364&width=300', qty, true, true);
+    // Add current product to cart
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
+    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 199);
+    const productImg = document.getElementById('mainImage')?.src || '';
+    const productId = 'product-' + Date.now();
     
-    document.getElementById('checkoutModal').classList.add('open');
-    document.getElementById('checkoutStep1').style.display = 'block';
-    document.getElementById('checkoutStep2').style.display = 'none';
-
-    // NEW: Pre-fill Name & Phone if logged in
-    const userPhone = localStorage.getItem('plushieUser');
-    const userName = localStorage.getItem('plushieUserName');
-    if (userPhone) {
-        const custName = document.getElementById('custName');
-        const custPhone = document.getElementById('custPhone');
-        if (custName && userName) custName.value = userName;
-        if (custPhone) custPhone.value = userPhone.replace("+91", "");
-    }
+    addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
+    
+    // Redirect to checkout.html with payment method selection
+    window.location.href = 'checkout.html';
   }
 
   function closeCheckout() {

@@ -4,6 +4,10 @@ let selectedPaymentMethod = 'online'; // Default to online payment
 document.addEventListener('DOMContentLoaded', () => {
     displayCheckoutCart();
     calculateTotals();
+    // Update button text on initial load
+    const buttonText = document.getElementById('buttonText');
+    const totalAmount = parseFloat(sessionStorage.getItem('orderTotal')) || 0;
+    buttonText.innerHTML = `Pay ₹<span id="payAmount">${totalAmount.toFixed(2)}</span> with Razorpay`;
 });
 
 function selectPaymentMethod(method) {
@@ -75,9 +79,9 @@ function calculateTotals() {
     // Shipping charges based on payment method
     let shipping = 0;
     if (selectedPaymentMethod === 'cod') {
-        shipping = 59; // ₹59 for COD
+        shipping = 59; // ₹59 for COD only
     } else {
-        shipping = subtotal > 500 ? 0 : 50; // ₹50 or free for online
+        shipping = 0; // Free shipping for online payment
     }
     
     // Total (without GST)
