@@ -4,10 +4,22 @@ let selectedPaymentMethod = 'online'; // Default to online payment
 document.addEventListener('DOMContentLoaded', () => {
     displayCheckoutCart();
     calculateTotals();
-    // Update button text on initial load
+    
+    // Update button text on initial load with proper fallback
     const buttonText = document.getElementById('buttonText');
-    const totalAmount = parseFloat(sessionStorage.getItem('orderTotal')) || 0;
-    buttonText.innerHTML = `Pay ₹<span id="payAmount">${totalAmount.toFixed(2)}</span> with Razorpay`;
+    let totalAmount = parseFloat(sessionStorage.getItem('orderTotal')) || 0;
+    
+    // If sessionStorage doesn't have amount, calculate from cart
+    if (totalAmount <= 0) {
+        const cart = JSON.parse(localStorage.getItem('plushie_cart')) || [];
+        totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    }
+    
+    if (selectedPaymentMethod === 'cod') {
+        buttonText.innerHTML = `Pay ₹59 Shipping Charges`;
+    } else {
+        buttonText.innerHTML = `Pay ₹<span id="payAmount">${totalAmount.toFixed(2)}</span> with Razorpay`;
+    }
 });
 
 function selectPaymentMethod(method) {
@@ -167,41 +179,18 @@ Do you want to proceed?`;
 
     // Handle Online Payment
     try {
-        // Create order on backend
-        const response = await fetch('http://localhost:3000/api/create-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount: totalAmount * 100, // Convert to paise
-                currency: 'INR',
-                receipt: 'receipt_' + Date.now(),
-                customer: {
-                    name: customerName,
-                    email: customerEmail,
-                    phone: customerPhone
-                }
-            })
-        });
-
-        const orderData = await response.json();
-
-        if (!response.ok) {
-            showError(orderData.message || 'Failed to create order');
-            return;
-        }
-
-        // Razorpay Options
+        const orderIdMock = 'rcpt_' + Date.now();
+        // Razorpay Options without Backend Dependency
         const options = {
-            key: orderData.key_id, // Will be sent from backend
+            key: 'rzp_live_SYAT3i5InOHe8B', // Direct Live Key Integration
             amount: totalAmount * 100, // Amount in paise
             currency: 'INR',
             name: 'Plushieland',
             description: `${cart.length} item(s)`,
             image: 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300',
-            order_id: orderData.order_id,
+            // Omit order_id to fallback to direct charge
             handler: function(response) {
+                const orderData = { order_id: orderIdMock };
                 handlePaymentSuccess(response, orderData);
             },
             prefill: {
@@ -217,15 +206,12 @@ Do you want to proceed?`;
             theme: {
                 color: '#d946ef'
             },
-            // Remove cancel button - only show OK button
             modal: {
                 ondismiss: function() {
-                    // Prevent closing the modal by showing a warning
-                    alert('Please complete your payment. Click OK to continue.');
-                    return false; // Keep modal open
+                    alert('Please complete your payment.');
+                    return false; 
                 }
             },
-            // Disable Escape key to close modal
             backdrop: true
         };
 
@@ -299,41 +285,17 @@ function handleCOD(totalAmount, customerName, customerEmail, customerPhone, cart
 
 async function processRazorpayForCOD(shippingCharge, customerName, customerEmail, customerPhone, totalAmount, cart) {
     try {
-        // Create order on backend for shipping charge
-        const response = await fetch('http://localhost:3000/api/create-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount: shippingCharge * 100, // Convert to paise
-                currency: 'INR',
-                receipt: 'receipt_cod_' + Date.now(),
-                customer: {
-                    name: customerName,
-                    email: customerEmail,
-                    phone: customerPhone
-                }
-            })
-        });
-
-        const orderData = await response.json();
-
-        if (!response.ok) {
-            showError(orderData.message || 'Failed to create order');
-            return;
-        }
-
+        const orderIdMock = 'rcpt_cod_' + Date.now();
         // Razorpay Options for COD
         const options = {
-            key: orderData.key_id,
+            key: 'rzp_live_SYAT3i5InOHe8B',
             amount: shippingCharge * 100, // Amount in paise
             currency: 'INR',
             name: 'Plushieland',
             description: `Cash on Delivery - Shipping Advance`,
             image: 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300',
-            order_id: orderData.order_id,
             handler: function(response) {
+                const orderData = { order_id: orderIdMock };
                 handleCODPaymentSuccess(response, orderData, totalAmount, customerName, customerEmail, customerPhone);
             },
             prefill: {

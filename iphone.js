@@ -104,16 +104,16 @@ const images = [
   const PRICE_PER_ITEM = 999;
 
   function openCheckout() {
-    // Add current product to cart
-    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
-    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 999);
+    // Add current product to cart with explicit price
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'iPhone 17 Pro 1TB';
+    const productPrice = PRICE_PER_ITEM;
     const productImg = document.getElementById('mainImage')?.src || '';
-    const productId = 'product-' + Date.now();
+    const productId = 'iphone-17-pro-' + Date.now();
     
     addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
     
-    // Redirect to checkout.html with payment method selection
-    window.location.href = 'checkout.html';
+    // Show quick payment dialog
+    showQuickPaymentDialog(productPrice);
   }
 
   function closeCheckout() {

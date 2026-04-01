@@ -106,15 +106,15 @@ const images = [
 
   function openCheckout() {
     // Add current product to cart
-    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
-    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 199);
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Jhumka Box';
+    const productPrice = PRICE_PER_ITEM;
     const productImg = document.getElementById('mainImage')?.src || '';
-    const productId = 'product-' + Date.now();
+    const productId = 'jhumka-box-' + Date.now();
     
     addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
     
-    // Redirect to checkout.html with payment method selection
-    window.location.href = 'checkout.html';
+    // Show quick payment dialog
+    showQuickPaymentDialog(productPrice);
   }
 
   function closeCheckout() {

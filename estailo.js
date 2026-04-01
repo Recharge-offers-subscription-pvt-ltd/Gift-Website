@@ -105,15 +105,15 @@ const images = [
 
   function openCheckout() {
     // Add current product to cart
-    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
-    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 149);
+    const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Estailo Fashion';
+    const productPrice = 149;
     const productImg = document.getElementById('mainImage')?.src || '';
-    const productId = 'product-' + Date.now();
+    const productId = 'estailo-premium-' + Date.now();
     
     addToCartGlobal(productId, productName, productPrice, productImg, qty, true, true);
     
-    // Redirect to checkout.html with payment method selection
-    window.location.href = 'checkout.html';
+    // Show quick payment dialog
+    showQuickPaymentDialog(productPrice);
   }
 
   function closeCheckout() {

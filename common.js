@@ -30,6 +30,185 @@ let isMockMode = true; // Default to mock mode until real keys are provided
 const RZP_KEY_ID = "rzp_test_SXr2WUwQxlLtZo";
 
 /**
+ * Quick Payment Dialog - Get customer name and phone before Razorpay
+ */
+function showQuickPaymentDialog(totalAmount) {
+    const dialogHTML = `
+        <div class="quick-pay-overlay" id="quickPayOverlay" onclick="closeQuickPayDialog(event)">
+            <div class="quick-pay-box" onclick="event.stopPropagation()">
+                <h2>Complete Payment</h2>
+                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Amount: <strong>₹${totalAmount}</strong></p>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Full Name</label>
+                    <input type="text" id="quickPayName" placeholder="Your Name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Phone Number</label>
+                    <input type="tel" id="quickPayPhone" placeholder="+91 XXXXXXXXXX" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px;">
+                </div>
+                
+                <button onclick="proceedToRazorpay(${totalAmount})" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 10px;">
+                    Pay ₹${totalAmount} with Razorpay
+                </button>
+                <button onclick="closeQuickPayDialog()" style="width: 100%; padding: 12px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+        
+        <style>
+            .quick-pay-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.6);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            }
+            .quick-pay-box {
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                width: 90%;
+                max-width: 400px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+            .quick-pay-box h2 {
+                margin: 0 0 15px 0;
+                font-size: 20px;
+                color: #333;
+            }
+        </style>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', dialogHTML);
+    document.getElementById('quickPayName').focus();
+}
+
+function closeQuickPayDialog(event) {
+    if (event && event.target.id !== 'quickPayOverlay') return;
+    const overlay = document.getElementById('quickPayOverlay');
+    if (overlay) overlay.remove();
+}
+
+function proceedToRazorpay(amount) {
+    const name = document.getElementById('quickPayName').value.trim();
+    const phone = document.getElementById('quickPayPhone').value.trim();
+    
+    if (!name) {
+        alert('Please enter your name');
+        document.getElementById('quickPayName').focus();
+        return;
+    }
+    
+    if (!phone) {
+        alert('Please enter your phone number');
+        document.getElementById('quickPayPhone').focus();
+        return;
+    }
+    
+    // Close dialog and initiate payment
+    closeQuickPayDialog();
+    
+    // Call direct Razorpay payment
+    payWithRazorpay(amount, name, phone);
+}
+
+/**
+ * Direct Razorpay Payment Processing
+ * Called from product pages - opens Razorpay directly without backend
+ */
+function payWithRazorpay(amount, customerName, customerPhone) {
+    // Validate and sanitize amount
+    let validAmount = parseFloat(amount);
+    
+    if (!validAmount || validAmount <= 0) {
+        console.error('Invalid amount:', amount);
+        alert("Invalid payment amount: ₹" + amount);
+        return;
+    }
+
+    validAmount = Math.round(validAmount);
+    
+    // Get cart items
+    const cart = JSON.parse(localStorage.getItem('plushie_cart')) || [];
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    // Validate customer info
+    if (!customerName || !customerPhone) {
+        alert("Please enter name and phone number");
+        return;
+    }
+
+    // Create Razorpay order data - using client-side order creation
+    const options = {
+        key: RZP_KEY_ID,
+        amount: validAmount * 100, // Convert to paise
+        currency: 'INR',
+        name: 'Plushieland Gift Store',
+        description: `Order for ${cart.length} item(s)`,
+        prefill: {
+            name: customerName,
+            contact: customerPhone
+        },
+        handler: function(response) {
+            // Payment successful
+            const orderDetails = {
+                orderId: 'PL' + Math.floor(100000 + Math.random() * 900000),
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpaySignature: response.razorpay_signature,
+                amount: validAmount,
+                timestamp: new Date().toISOString(),
+                customer: {
+                    name: customerName,
+                    phone: customerPhone
+                },
+                items: cart
+            };
+            
+            // Save order
+            localStorage.setItem('lastOrder', JSON.stringify(orderDetails));
+            localStorage.removeItem('plushie_cart');
+            
+            // Show success message
+            alert('✅ Payment Successful!\\nOrder ID: ' + orderDetails.orderId);
+            
+            // Redirect to success page
+            setTimeout(() => {
+                window.location.href = 'order-success.html?orderId=' + orderDetails.orderId;
+            }, 1500);
+        },
+        modal: {
+            ondismiss: function() {
+                alert('Payment cancelled. Please try again.');
+            }
+        },
+        theme: {
+            color: '#d946ef'
+        }
+    };
+
+    // Open Razorpay checkout
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(response) {
+        alert('Payment Failed: ' + response.error.description);
+        console.error('Payment Error:', response.error);
+    });
+    
+    rzp.open();
+}
+
+/**
  * Initializes Firebase and Auth UI
  */
 function initAuth() {
@@ -661,13 +840,15 @@ function closeCart() {
 
 function proceedToCheckoutFromCart() {
     closeCart();
-    // Redirect to checkout page
+    // Get cart total and show quick payment dialog
     const cart = JSON.parse(localStorage.getItem('plushie_cart')) || [];
     if (cart.length === 0) {
         alert('Your cart is empty!');
         return;
     }
-    window.location.href = 'checkout.html';
+    
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    showQuickPaymentDialog(totalAmount);
 }
 
 /**
