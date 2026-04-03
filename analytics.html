@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .page-breakdown {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .page-breakdown h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .page-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .page-item:last-child {
+            border-bottom: none;
+        }
+        
+        .page-name {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .page-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .recent-visits {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .recent-visits h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .visit-row {
+            display: grid;
+            grid-template-columns: 100px 200px 150px 1fr;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85em;
+            align-items: center;
+        }
+        
+        .visit-row:last-child {
+            border-bottom: none;
+        }
+        
+        .visit-page {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .visit-time {
+            color: #999;
+        }
+        
+        .visit-ip {
+            color: #666;
+            font-family: monospace;
+            font-size: 0.8em;
+        }
+        
+        .refresh-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .loading {
+            color: white;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .error {
+            background: #ff6b6b;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Visitor Analytics</h1>
+        
+        <div id="content" class="loading">
+            Loading analytics data...
+        </div>
+        
+        <button class="refresh-btn" onclick="loadStats()">🔄 Refresh</button>
+    </div>
+
+    <script>
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString('en-IN', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/visitor-stats');
+                const data = await response.json();
+
+                let html = '<div class="stats-grid">';
+                
+                // Total Visits Card
+                html += `
+                    <div class="stat-card">
+                        <h3>Total Visits</h3>
+                        <div class="number">${data.totalVisits}</div>
+                    </div>
+                `;
+                
+                // Unique Visitors Card
+                html += `
+                    <div class="stat-card">
+                        <h3>Unique Visitors</h3>
+                        <div class="number">${data.uniqueVisitors}</div>
+                    </div>
+                `;
+                
+                // Most Popular Page
+                const pages = Object.entries(data.pageBreakdown)
+                    .sort((a, b) => b[1] - a[1]);
+                const topPage = pages[0];
+                html += `
+                    <div class="stat-card">
+                        <h3>Most Popular</h3>
+                        <div class="number">${topPage ? topPage[1] : 0}</div>
+                        <small style="color: #999;">${topPage ? topPage[0] : 'N/A'}</small>
+                    </div>
+                `;
+                
+                html += '</div>';
+
+                // Page Breakdown
+                if (pages.length > 0) {
+                    html += '<div class="page-breakdown">';
+                    html += '<h2>📄 Page Views</h2>';
+                    pages.forEach(([page, count]) => {
+                        html += `
+                            <div class="page-item">
+                                <span class="page-name">${page || '/'}</span>
+                                <span class="page-count">${count} views</span>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                // Recent Visits
+                if (data.recentVisits.length > 0) {
+                    html += '<div class="recent-visits">';
+                    html += '<h2>🕐 Recent Visits (Last 20)</h2>';
+                    html += '<div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #eee;">';
+                    html += '<div class="visit-row" style="border-bottom: none; font-weight: bold; color: #667eea;">';
+                    html += '<div>#ID</div><div>Time</div><div>Page</div><div>IP Address</div>';
+                    html += '</div></div>';
+                    
+                    data.recentVisits.forEach((visit, index) => {
+                        const time = new Date(visit.timestamp);
+                        const timeStr = time.toLocaleTimeString('en-IN');
+                        html += `
+                            <div class="visit-row">
+                                <div>#${visit.id}</div>
+                                <div class="visit-time">${timeStr}</div>
+                                <div class="visit-page">${visit.page || '/'}</div>
+                                <div class="visit-ip">${visit.ip}</div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                document.getElementById('content').innerHTML = html;
+            } catch (error) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error">⚠️ Error loading analytics: ${error.message}</div>
+                `;
+            }
+        }
+
+        // Load stats on page load
+        loadStats();
+
+        // Auto-refresh every 10 seconds
+        setInterval(loadStats, 10000);
+    </script>
+</body>
+</html>

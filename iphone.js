@@ -106,7 +106,7 @@ const images = [
   function openCheckout() {
     // Add current product to cart
     const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Product';
-    const productPrice = parseFloat(document.querySelector('.sale-price')?.textContent?.replace(/[^\d.]/g, '') || 999);
+    const productPrice = PRICE_PER_ITEM;
     const productImg = document.getElementById('mainImage')?.src || '';
     const productId = 'product-' + Date.now();
     
