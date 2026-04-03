@@ -101,7 +101,7 @@ const images = [
   }
 
   // --- CHECKOUT LOGIC ---
-  const PRICE_PER_ITEM = 99999;
+  const PRICE_PER_ITEM = 999;
 
   function openCheckout() {
     // Add current product to cart
