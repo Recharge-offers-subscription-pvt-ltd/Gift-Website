@@ -121,7 +121,8 @@ function removeFromCart(id) {
 }
 
 // Open checkout
-functiont checkoutModal = document.getElementById('checkoutModal');
+function openCheckout() {
+    const checkoutModal = document.getElementById('checkoutModal');
     if (checkoutModal) {
         closeCart();
         document.getElementById('checkoutStep1').style.display = 'block';
@@ -129,7 +130,7 @@ functiont checkoutModal = document.getElementById('checkoutModal');
         document.getElementById('checkoutLoading').style.display = 'none';
         document.getElementById('checkoutStep_Success').style.display = 'none';
         // Initialize payment method
-        selectPaymentMethod('UPI');
+        selectPaymentMethod('Card');
         checkoutModal.classList.add('active');
     }
 }
@@ -335,7 +336,6 @@ function closeCheckout() {
 }
 
 // Close cart
-function clos modal
 function closeCart() {
     const checkoutModal = document.getElementById('checkoutModal');
     if (checkoutModal) {
@@ -362,6 +362,7 @@ function openCartModal(content) {
 // Show modal (alias for compatibility)
 function showModal(content) {
     openCartModal(content);
+}
 
 // Create cart modal
 function createCartModal() {
@@ -451,3 +452,4 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
