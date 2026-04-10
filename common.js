@@ -26,18 +26,24 @@ function addToCartGlobal(id, name, price, image, qty) {
 // Update cart count
 function updateCartCount() {
     const cartCount = document.getElementById('cartCount');
-    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-    
-    if (totalItems > 0) {
-        cartCount.textContent = totalItems;
-        cartCount.style.display = 'flex';
-    } else {
-        cartCount.style.display = 'none';
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+        if (totalItems > 0) {
+            cartCount.textContent = totalItems;
+            cartCount.style.display = 'flex;';
+            cartCount.style.width = '20px';
+            cartCount.style.height = '20px';
+        } else {
+            cartCount.style.display = 'none';
+        }
     }
 }
 
 // Open cart
 function openCart() {
+    // Reload cart from localStorage to ensure we have latest data
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
     if (cart.length === 0) {
         showNotification('Your cart is empty 😢');
         return;
@@ -60,10 +66,10 @@ function openCart() {
                     <strong style="display: block; margin-bottom: 5px;">${item.name}</strong>
                     <span style="color: var(--primary); font-weight: 700;">Rs. ${item.price}</span>
                     <div style="margin-top: 8px; display: flex; gap: 8px; align-items: center;">
-                        <button onclick="updateCartQty('${item.id}', -1)" style="width: 24px; height: 24px; border: 1px solid var(--border); background: white; border-radius: 4px; cursor: pointer;">−</button>
+                        <button onclick="updateCartQty('${item.id}', -1)" style="width: 24px; height: 24px; border: 1px solid var(--border); background: white; border-radius: 4px; cursor: pointer; font-weight: 700;">−</button>
                         <span style="min-width: 30px; text-align: center;">${item.qty}</span>
-                        <button onclick="updateCartQty('${item.id}', 1)" style="width: 24px; height: 24px; border: 1px solid var(--border); background: white; border-radius: 4px; cursor: pointer;">+</button>
-                        <button onclick="removeFromCart('${item.id}')" style="margin-left: auto; background: none; border: none; color: var(--danger); cursor: pointer; font-weight: 700;">Remove</button>
+                        <button onclick="updateCartQty('${item.id}', 1)" style="width: 24px; height: 24px; border: 1px solid var(--border); background: white; border-radius: 4px; cursor: pointer; font-weight: 700;">+</button>
+                        <button onclick="removeFromCart('${item.id}')" style="margin-left: auto; background: none; border: none; color: var(--danger); cursor: pointer; font-weight: 700; font-size: 0.9rem;">✕ Remove</button>
                     </div>
                 </div>
             </div>
@@ -77,13 +83,13 @@ function openCart() {
                     <strong>Total:</strong>
                     <strong style="color: var(--primary);">Rs. ${total}</strong>
                 </div>
-                <button class="btn-buy" onclick="openCheckout()" style="margin-bottom: 10px;">Proceed to Checkout ➡️</button>
-                <button class="btn-cart" onclick="closeCart()">Continue Shopping</button>
+                <button class="btn-buy" onclick="openCheckout()" style="margin-bottom: 10px; width: 100%;">Proceed to Checkout ➡️</button>
+                <button class="btn-cart" onclick="closeCart()" style="width: 100%;">Continue Shopping</button>
             </div>
         </div>
     `;
     
-    showModal(cartHTML);
+    openCartModal(cartHTML);
 }
 
 // Update cart quantity
@@ -110,13 +116,12 @@ function removeFromCart(id) {
         openCart();
     } else {
         closeCart();
-        showNotification('Item removed from cart');
+        showNotification('Item removed from cart ✓');
     }
 }
 
 // Open checkout
-function openCheckout() {
-    const checkoutModal = document.getElementById('checkoutModal');
+functiont checkoutModal = document.getElementById('checkoutModal');
     if (checkoutModal) {
         closeCart();
         document.getElementById('checkoutStep1').style.display = 'block';
@@ -134,10 +139,15 @@ function startCheckoutProcessing() {
     const name = document.getElementById('custName');
     const phone = document.getElementById('custPhone');
     const house = document.getElementById('custHouse');
-    const email = document.getElementById('custEmail');
+    const city = document.getElementById('custCity');
     
-    if (!name.value || !phone.value || !house.value) {
+    if (!name.value || !phone.value || !house.value || !city.value) {
         showNotification('Please fill all required fields ⚠️');
+        return;
+    }
+    
+    if (phone.value.length < 10) {
+        showNotification('Please enter valid phone number ⚠️');
         return;
     }
     
@@ -186,7 +196,7 @@ function selectPaymentMethod(method) {
     }
 }
 
-// Proceed to final
+// Proceed to final - Razorpay Integration
 function proceedToFinal() {
     const method = document.querySelector('.payment-option.selected');
     if (!method) {
@@ -194,20 +204,107 @@ function proceedToFinal() {
         return;
     }
     
+    const selectedMethod = method.id.replace('opt', '');
+    
+    if (selectedMethod === 'UPI' || selectedMethod === 'Card') {
+        // Razorpay Payment
+        processRazorpayPayment();
+    } else if (selectedMethod === 'COD') {
+        // Cash on Delivery
+        processCODPayment();
+    }
+}
+
+// Razorpay Payment Processing
+function processRazorpayPayment() {
+    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const name = document.getElementById('custName').value;
+    const phone = document.getElementById('custPhone').value;
+    
     document.getElementById('checkoutStep2').style.display = 'none';
     document.getElementById('checkoutLoading').style.display = 'block';
     
     setTimeout(() => {
+        const options = {
+            key: RAZORPAY_KEY_ID,
+            amount: total * 100, // Amount in paise
+            currency: 'INR',
+            name: 'Plushieland Gift Store',
+            description: 'Bunny Plushie Order',
+            image: 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300',
+            prefill: {
+                name: name,
+                contact: phone,
+            },
+            theme: {
+                color: '#e8719b'
+            },
+            handler: function(response) {
+                // Payment successful
+                completeOrder(response.razorpay_payment_id, 'Razorpay');
+            },
+            modal: {
+                ondismiss: function() {
+                    document.getElementById('checkoutLoading').style.display = 'none';
+                    document.getElementById('checkoutStep2').style.display = 'block';
+                    showNotification('Payment cancelled ❌');
+                }
+            }
+        };
+        
+        const rzp = new Razorpay(options);
+        rzp.open();
+        
         document.getElementById('checkoutLoading').style.display = 'none';
-        document.getElementById('checkoutStep_Success').style.display = 'block';
-        
-        const randomID = Math.random().toString(36).substring(2, 8).toUpperCase();
-        document.getElementById('randomOrderID').textContent = randomID;
-        
-        cart = [];
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
+    }, 1500);
+}
+
+// COD Payment Processing
+function processCODPayment() {
+    document.getElementById('checkoutStep2').style.display = 'none';
+    document.getElementById('checkoutLoading').style.display = 'block';
+    
+    setTimeout(() => {
+        completeOrder('COD-' + Date.now(), 'Cash on Delivery');
     }, 2000);
+}
+
+// Complete Order
+function completeOrder(paymentId, method) {
+    document.getElementById('checkoutLoading').style.display = 'none';
+    document.getElementById('checkoutStep_Success').style.display = 'block';
+    
+    const randomID = Math.random().toString(36).substring(2, 8).toUpperCase();
+    document.getElementById('randomOrderID').textContent = randomID;
+    
+    // Store order details
+    const order = {
+        orderId: randomID,
+        paymentId: paymentId,
+        paymentMethod: method,
+        items: cart,
+        total: cart.reduce((sum, item) => sum + item.price * item.qty, 0),
+        customerName: document.getElementById('custName').value,
+        customerPhone: document.getElementById('custPhone').value,
+        address: {
+            house: document.getElementById('custHouse').value,
+            street: document.getElementById('custStreet').value,
+            landmark: document.getElementById('custLandmark').value,
+            pincode: document.getElementById('custPincode').value,
+            city: document.getElementById('custCity').value,
+        },
+        timestamp: new Date().toISOString()
+    };
+    
+    // Save order to localStorage
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push(order);
+    localStorage.setItem('orders', JSON.stringify(orders));
+    
+    // Clear cart
+    cart = [];
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
 }
 
 // Go back to methods
@@ -218,21 +315,27 @@ function goBackToMethods() {
 
 // Close checkout
 function closeCheckout() {
-    document.getElementById('checkoutModal').classList.remove('active');
-    document.getElementById('checkoutStep1').style.display = 'block';
-    document.getElementById('checkoutStep2').style.display = 'none';
-    document.getElementById('checkoutLoading').style.display = 'none';
-    document.getElementById('checkoutStep_Success').style.display = 'none';
-    document.getElementById('custName').value = '';
-    document.getElementById('custPhone').value = '';
-    document.getElementById('custHouse').value = '';
-    document.getElementById('custStreet').value = '';
-    document.getElementById('custLandmark').value = '';
-    document.getElementById('custPincode').value = '';
-    document.getElementById('custCity').value = '';
+    const checkoutModal = document.getElementById('checkoutModal');
+    if (checkoutModal) {
+        checkoutModal.classList.remove('active');
+        // Reset form
+        document.getElementById('checkoutStep1').style.display = 'block';
+        document.getElementById('checkoutStep2').style.display = 'none';
+        document.getElementById('checkoutLoading').style.display = 'none';
+        document.getElementById('checkoutStep_Success').style.display = 'none';
+        // Clear form inputs
+        document.getElementById('custName').value = '';
+        document.getElementById('custPhone').value = '';
+        document.getElementById('custHouse').value = '';
+        document.getElementById('custStreet').value = '';
+        document.getElementById('custLandmark').value = '';
+        document.getElementById('custPincode').value = '';
+        document.getElementById('custCity').value = '';
+    }
 }
 
 // Close cart
+function clos modal
 function closeCart() {
     const checkoutModal = document.getElementById('checkoutModal');
     if (checkoutModal) {
@@ -240,13 +343,14 @@ function closeCart() {
     }
 }
 
-// Show modal
-function showModal(content) {
+// Open cart modal
+function openCartModal(content) {
     const modal = document.getElementById('checkoutModal');
     if (modal) {
         const box = modal.querySelector('.checkout-box');
+        // Clear existing checkout form
         box.innerHTML = `<button class="modal-close checkout-close" onclick="closeCart()">✕</button>${content}`;
-        // Hide all checkout steps to show cart content
+        // Make sure checkout steps are hidden to show cart view
         document.getElementById('checkoutStep1').style.display = 'none';
         document.getElementById('checkoutStep2').style.display = 'none';
         document.getElementById('checkoutLoading').style.display = 'none';
@@ -254,6 +358,10 @@ function showModal(content) {
         modal.classList.add('active');
     }
 }
+
+// Show modal (alias for compatibility)
+function showModal(content) {
+    openCartModal(content);
 
 // Create cart modal
 function createCartModal() {

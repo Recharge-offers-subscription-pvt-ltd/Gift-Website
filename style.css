@@ -473,7 +473,7 @@ footer p {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    display: none;
+    display: none !important;
     align-items: center;
     justify-content: center;
     z-index: 1000;
@@ -481,7 +481,7 @@ footer p {
 }
 
 .modal-overlay.active {
-    display: flex;
+    display: flex !important;
 }
 
 .modal-close {
