@@ -1,6 +1,49 @@
 // Global cart management
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let reviews = [];
+let customAmount = 0; // Track custom amount
+
+// Tiered Pricing Function
+function getTieredPrice(quantity) {
+    if (quantity >= 21) return 2101;
+    if (quantity >= 10) return 1001;
+    if (quantity >= 5) return 501;
+    if (quantity >= 2) return 251;
+    return 101;
+}
+
+// Update custom amount
+function updateCustomAmount() {
+    const input = document.getElementById('customAmountInput');
+    const display = document.getElementById('customAmountDisplay');
+    const amount = parseInt(input.value) || 0;
+    customAmount = amount;
+    
+    if (amount > 0) {
+        display.textContent = `✓ Additional Rs. ${amount} will be added!`;
+        display.style.display = 'block';
+        updateFinalPaymentAmount();
+    } else {
+        display.style.display = 'none';
+    }
+}
+
+// Clear custom amount
+function clearCustomAmount() {
+    document.getElementById('customAmountInput').value = '';
+    document.getElementById('customAmountDisplay').style.display = 'none';
+    customAmount = 0;
+    updateFinalPaymentAmount();
+}
+
+// Update final payment amount with custom amount
+function updateFinalPaymentAmount() {
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    const baseTotal = getTieredPrice(totalQty);
+    const finalTotal = baseTotal + customAmount;
+    document.getElementById('methodAmountStr').textContent = `Rs. ${finalTotal}`;
+    document.getElementById('btnPayText').textContent = `Pay Rs. ${finalTotal}`;
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
@@ -55,16 +98,25 @@ function openCart() {
             <div style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
     `;
     
-    let total = 0;
+    // Calculate total quantity
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    const total = getTieredPrice(totalQty);
+    
+    // Show tiered pricing info
+    cartHTML += `
+            <div style="background: #f0f0f0; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 0.85rem; line-height: 1.5; color: var(--text-light);">
+                <strong style="display: block; margin-bottom: 8px; color: var(--text);">📊 Tiered Pricing:</strong>
+                1x = Rs. 101 | 2x = Rs. 251 | 5x = Rs. 501 | 10x = Rs. 1,001 | 21x = Rs. 2,101
+            </div>
+    `;
+    
     cart.forEach(item => {
-        const itemTotal = item.price * item.qty;
-        total += itemTotal;
         cartHTML += `
             <div style="display: flex; gap: 15px; padding: 15px; background: var(--bg-light); border-radius: 8px; margin-bottom: 12px; align-items: center;">
                 <img src="${item.image}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px;">
                 <div style="flex: 1;">
                     <strong style="display: block; margin-bottom: 5px;">${item.name}</strong>
-                    <span style="color: var(--primary); font-weight: 700;">Rs. ${item.price}</span>
+                    <span style="color: var(--primary); font-weight: 700;">Starting at Rs. ${item.price}</span>
                     <div style="margin-top: 8px; display: flex; gap: 8px; align-items: center;">
                         <button onclick="updateCartQty('${item.id}', -1)" style="width: 24px; height: 24px; border: 1px solid var(--border); background: white; border-radius: 4px; cursor: pointer; font-weight: 700;">−</button>
                         <span style="min-width: 30px; text-align: center;">${item.qty}</span>
@@ -79,7 +131,11 @@ function openCart() {
     cartHTML += `
             </div>
             <div style="border-top: 2px solid var(--border); padding-top: 15px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-light);">
+                    <span>Qty: ${totalQty}</span>
+                    <span>Total Price (Tiered):</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.2rem;">
                     <strong>Total:</strong>
                     <strong style="color: var(--primary);">Rs. ${total}</strong>
                 </div>
@@ -164,9 +220,11 @@ function startCheckoutProcessing() {
 
 // Update payment display
 function updatePaymentDisplay() {
-    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-    document.getElementById('methodAmountStr').textContent = `Rs. ${total}`;
-    document.getElementById('btnPayText').textContent = `Pay Rs. ${total}`;
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    const baseTotal = getTieredPrice(totalQty);
+    const finalTotal = baseTotal + customAmount;
+    document.getElementById('methodAmountStr').textContent = `Rs. ${finalTotal}`;
+    document.getElementById('btnPayText').textContent = `Pay Rs. ${finalTotal}`;
     
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -218,7 +276,9 @@ function proceedToFinal() {
 
 // Razorpay Payment Processing
 function processRazorpayPayment() {
-    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    const baseTotal = getTieredPrice(totalQty);
+    const total = baseTotal + customAmount;
     const name = document.getElementById('custName').value;
     const phone = document.getElementById('custPhone').value;
     
@@ -279,12 +339,17 @@ function completeOrder(paymentId, method) {
     document.getElementById('randomOrderID').textContent = randomID;
     
     // Store order details
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    const baseTotal = getTieredPrice(totalQty);
     const order = {
         orderId: randomID,
         paymentId: paymentId,
         paymentMethod: method,
         items: cart,
-        total: cart.reduce((sum, item) => sum + item.price * item.qty, 0),
+        quantity: totalQty,
+        basePrice: baseTotal,
+        customAmount: customAmount,
+        total: baseTotal + customAmount,
         customerName: document.getElementById('custName').value,
         customerPhone: document.getElementById('custPhone').value,
         address: {
@@ -311,7 +376,8 @@ function completeOrder(paymentId, method) {
 // Go back to methods
 function goBackToMethods() {
     document.getElementById('checkoutStep2').style.display = 'block';
-    selectPaymentMethod('UPI');
+    updatePaymentDisplay();
+    selectPaymentMethod('Card');
 }
 
 // Close checkout
@@ -332,6 +398,8 @@ function closeCheckout() {
         document.getElementById('custLandmark').value = '';
         document.getElementById('custPincode').value = '';
         document.getElementById('custCity').value = '';
+        // Clear custom amount
+        clearCustomAmount();
     }
 }
 
