@@ -2,6 +2,7 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let reviews = [];
 let customAmount = 0; // Track custom amount
+let selectedQuantity = 1; // Track selected quantity for product
 
 // Tiered Pricing Function
 function getTieredPrice(quantity) {
@@ -10,6 +11,28 @@ function getTieredPrice(quantity) {
     if (quantity >= 5) return 501;
     if (quantity >= 2) return 251;
     return 101;
+}
+
+// Select quantity for product
+function selectQuantity(qty) {
+    selectedQuantity = qty;
+    // Update UI - highlight selected button
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    document.querySelector(`[data-qty="${qty}"]`).classList.add('selected');
+    showNotification(`✓ Selected x${qty} - Rs. ${getTieredPrice(qty)}`);
+}
+
+// Add selected quantity to cart
+function addSelectedToCart() {
+    addToCartGlobal('bunny-pouch', 'Bunny Plushie Pouch', 101, 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300', selectedQuantity);
+}
+
+// Buy now with selected quantity
+function buyNowSelected() {
+    addToCartGlobal('bunny-pouch', 'Bunny Plushie Pouch', 101, 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300', selectedQuantity);
+    setTimeout(() => openCheckout(), 500);
 }
 
 // Update custom amount
