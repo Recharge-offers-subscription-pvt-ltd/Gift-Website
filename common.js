@@ -6,11 +6,11 @@ let selectedQuantity = 1; // Track selected quantity for product
 
 // Tiered Pricing Function
 function getTieredPrice(quantity) {
-    if (quantity >= 21) return 2101;
-    if (quantity >= 10) return 1001;
-    if (quantity >= 5) return 501;
-    if (quantity >= 2) return 251;
-    return 101;
+    if (quantity >= 21) return 349;
+    if (quantity >= 10) return 299;
+    if (quantity >= 5) return 279;
+    if (quantity >= 2) return 249;
+    return 199;
 }
 
 // Select quantity for product
@@ -26,13 +26,27 @@ function selectQuantity(qty) {
 
 // Add selected quantity to cart
 function addSelectedToCart() {
-    addToCartGlobal('bunny-pouch', 'Bunny Plushie Pouch', 101, 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300', selectedQuantity);
+    try {
+        addToCartGlobal('bunny-pouch', 'Bunny Plushie Pouch', 199, 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300', selectedQuantity);
+        showNotification(`✓ Added x${selectedQuantity} to cart!`);
+    } catch (error) {
+        console.error('Add to Cart Error:', error);
+        showNotification('Error adding to cart ❌');
+    }
 }
 
 // Buy now with selected quantity
 function buyNowSelected() {
-    addToCartGlobal('bunny-pouch', 'Bunny Plushie Pouch', 101, 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300', selectedQuantity);
-    setTimeout(() => openCheckout(), 500);
+    try {
+        // Add item to cart
+        addToCartGlobal('bunny-pouch', 'Bunny Plushie Pouch', 199, 'https://www.hellokidology.in/cdn/shop/files/7_c1ccd535-9aeb-4dd8-8a58-77f606a7223f.jpg?v=1741688694&width=300', selectedQuantity);
+        
+        // Open checkout immediately
+        openCheckout();
+    } catch (error) {
+        console.error('Buy Now Error:', error);
+        showNotification('Error with Buy Now ❌');
+    }
 }
 
 // Update custom amount
@@ -96,7 +110,7 @@ function updateCartCount() {
         const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
         if (totalItems > 0) {
             cartCount.textContent = totalItems;
-            cartCount.style.display = 'flex;';
+            cartCount.style.display = 'flex';
             cartCount.style.width = '20px';
             cartCount.style.height = '20px';
         } else {
@@ -129,7 +143,7 @@ function openCart() {
     cartHTML += `
             <div style="background: #f0f0f0; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 0.85rem; line-height: 1.5; color: var(--text-light);">
                 <strong style="display: block; margin-bottom: 8px; color: var(--text);">📊 Tiered Pricing:</strong>
-                1x = Rs. 101 | 2x = Rs. 251 | 5x = Rs. 501 | 10x = Rs. 1,001 | 21x = Rs. 2,101
+                1x = Rs. 199 | 2x = Rs. 249 | 5x = Rs. 279 | 10x = Rs. 299 | 21x = Rs. 349
             </div>
     `;
     
@@ -203,7 +217,7 @@ function removeFromCart(id) {
 function openCheckout() {
     const checkoutModal = document.getElementById('checkoutModal');
     if (checkoutModal) {
-        closeCart();
+        // Don't close cart, just show checkout steps
         document.getElementById('checkoutStep1').style.display = 'block';
         document.getElementById('checkoutStep2').style.display = 'none';
         document.getElementById('checkoutLoading').style.display = 'none';
@@ -211,6 +225,8 @@ function openCheckout() {
         // Initialize payment method
         selectPaymentMethod('Card');
         checkoutModal.classList.add('active');
+    } else {
+        showNotification('Checkout modal not found ❌');
     }
 }
 
